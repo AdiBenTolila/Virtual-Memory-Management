@@ -92,14 +92,6 @@ sim_mem::sim_mem(char exe_file_name1[],char exe_file_name2[],char swap_file_name
 }
 /**************************************************************************************/
 sim_mem::~sim_mem (){
-//    for(int i = 0; i< queuePage.size(); i++)
-//    {
-//        queue< page_descriptor * > tempQueue;
-//        printf("frame: %d,swap : %d \n",queuePage.front() -> frame,queuePage.front()->swap_index);
-//        tempQueue.push(queuePage.front());
-//        queuePage.pop();
-//        queuePage.push(tempQueue.back());
-//    }
     for (int i = 0; i < num_of_proc; ++i) {//free struct
         if (page_table[i] != nullptr) {
             free(page_table[i]);
@@ -113,7 +105,6 @@ sim_mem::~sim_mem (){
         close(program_fd[0]);
     if(num_of_proc == 2)
         close(program_fd[1]);
-
 
 }
 /**************************************************************************************/
@@ -252,7 +243,7 @@ void sim_mem:: findPlace(int* placeInMemory){
                 }
                 count = count + page_size;
             }
-            lseek(swapfile_fd, count - page_size, SEEK_SET); // go to the start of the file
+            lseek(swapfile_fd, count - page_size, SEEK_SET);
             write(swapfile_fd, main_memory + (*placeInMemory), page_size);
             pge -> swap_index = count - page_size;//find in the swap and put what in the main memory
         }
@@ -270,15 +261,6 @@ void sim_mem:: putInMemory(int process_id, int address,int* placeInMemory ){
         for (j = 0; !placeInRam[j] ; ++j);//find empty place
         (*placeInMemory) = j * page_size;
     }
-//    for (j = 0; j < (MEMORY_SIZE / page_size); ++j){//find empty place
-//        if(placeInRam[j] == EMPTY ){
-//            found = TRUE;
-//            break;
-//        }
-//    }
-//    if(found){
-//        (*placeInMemory) = j * page_size;
-//    }
     else{//find place in the memory
         findPlace(placeInMemory);
     }
