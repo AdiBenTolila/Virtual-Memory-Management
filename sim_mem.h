@@ -1,5 +1,4 @@
 /**
-   ex5:
     The program implements a simulation of processor access to memory and the program uses a paging mechanism that allows programs to be run only when even part of it is in the memory.
     We will divide the memory of the program into pages and if necessary load pages  These are for memory and we will use them (we will access them by struct and so we will know if the page is in memory, can we write / read from it
     if it is in swap where it is ,etc.)
@@ -38,7 +37,6 @@ typedef struct page_descriptor
 } page_descriptor;
 
 class sim_mem {
-    //i change the type!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     int swapfile_fd; //swap file fd
     int program_fd[2]{}; //executable file fd
     int text_size;
@@ -48,7 +46,7 @@ class sim_mem {
     int num_of_pages;
     int page_size;
     int num_of_proc;
-    page_descriptor **page_table; //pointer to page table.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    page_descriptor **page_table; 
 
 public:
     sim_mem(char exe_file_name1[],char exe_file_name2[],char swap_file_name[], int text_size, int data_size, int bss_size,int heap_stack_size, int num_of_pages, int page_size, int num_of_process);
