@@ -23,9 +23,18 @@
 #include <string>
 #include <cstdlib>
 #include <queue>
-using namespace std;
+#include <fcntl.h>
+#include <unistd.h>
+#include <cstring>
+
 #define MEMORY_SIZE 30
 extern char main_memory[MEMORY_SIZE];
+using namespace std;
+
+#define TRUE 1
+#define FALSE 0
+#define EMPTY TRUE//to know if there is an empty place
+#define FULL FALSE//to know if there is an empty place
 
 typedef struct page_descriptor
 {
@@ -38,7 +47,7 @@ typedef struct page_descriptor
 
 class sim_mem {
     int swapfile_fd; //swap file fd
-    int program_fd[2]{}; //executable file fd
+    int program_fd[2]; //executable file fd
     int text_size;
     int data_size;
     int bss_size;
@@ -46,22 +55,23 @@ class sim_mem {
     int num_of_pages;
     int page_size;
     int num_of_proc;
-    page_descriptor **page_table; 
-
+    page_descriptor **page_table; //pointer to page table
 public:
-    sim_mem(char exe_file_name1[],char exe_file_name2[],char swap_file_name[], int text_size, int data_size, int bss_size,int heap_stack_size, int num_of_pages, int page_size, int num_of_process);
+    sim_mem(char exe_file_name1[],char exe_file_name2[],char swap_file_name[], int text_size, int data_size, int bss_size, int heap_stack_size,int num_of_pages, int page_size, int num_of_process);
     ~sim_mem();
-    char load(int, int);
-    void store(int, int, char);
-    void print_memory();
+    char load(int process_id, int address);
+    void store(int process_id, int address, char value);
+    void print_memory() const;
     void print_swap () const;
-    void print_page_table();
+    void print_page_table() ;
 private:
     bool *placeInRam;
+    bool *emptyPlaceInSwap;
     int countSwap = 0;
+    int sizeSwap;
     std:: queue <page_descriptor *> queuePage;
     void putInMemory(int, int, int*);
     void findPlace(int*);
+    void transferFromSwapToRam(int process_id, int numPage,const int* placeInMemory );
 };
-
 #endif
